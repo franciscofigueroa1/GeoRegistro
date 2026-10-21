@@ -1,5 +1,6 @@
 package cl.francisco.georegistro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class ListadoActivity extends AppCompatActivity {
 
     private final ArrayList<String> textos = new ArrayList<>();
+    private final ArrayList<String> identificadores = new ArrayList<>();
     private ArrayAdapter<String> adaptador;
     private TextView tvEstadoListado;
     private ListenerRegistration escuchaListado;
@@ -47,6 +49,11 @@ public class ListadoActivity extends AppCompatActivity {
         ListView lvIncidencias = findViewById(R.id.lvIncidencias);
         adaptador = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, textos);
         lvIncidencias.setAdapter(adaptador);
+        lvIncidencias.setOnItemClickListener((lista, vista, posicion, id) -> {
+            Intent pantalla = new Intent(this, MapaActivity.class);
+            pantalla.putExtra("incidenciaId", identificadores.get(posicion));
+            startActivity(pantalla);
+        });
         findViewById(R.id.btnActualizar).setOnClickListener(v -> cargarIncidencias());
         findViewById(R.id.btnVolverListado).setOnClickListener(v -> finish());
     }
@@ -80,6 +87,7 @@ public class ListadoActivity extends AppCompatActivity {
                     if (resultado == null) return;
 
                     textos.clear();
+                    identificadores.clear();
                     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
                     for (DocumentSnapshot documento : resultado.getDocuments()) {
                         Object titulo = documento.get("titulo");
@@ -96,6 +104,7 @@ public class ListadoActivity extends AppCompatActivity {
                                 formato.format(((Timestamp) fecha).toDate()), descripcion,
                                 ((Number) latitud).doubleValue(), ((Number) longitud).doubleValue());
                         textos.add(texto + "\n" + textoSensor(documento));
+                        identificadores.add(documento.getId());
                     }
                     adaptador.notifyDataSetChanged();
 

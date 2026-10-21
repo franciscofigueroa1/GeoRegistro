@@ -40,7 +40,7 @@
     <string name="error_confirmacion">No se pudo confirmar el guardado. Consulta el listado antes de volver a registrar la incidencia.</string>
     <string name="listado_cargando">Cargando incidencias…</string>
     <string name="listado_vacio">Todavía no tienes incidencias guardadas.</string>
-    <string name="listado_actualizado">Listado actualizado.</string>
+    <string name="listado_actualizado">Listado actualizado. Toca una incidencia para verla en el mapa.</string>
     <string name="listado_cache">Mostrando datos locales. Esperando confirmación del servidor.</string>
     <string name="listado_pendiente">Hay incidencias pendientes de sincronizar. Se enviarán al recuperar la conexión.</string>
     <string name="error_listado">No se pudo cargar el listado. Comprueba la conexión y pulsa Actualizar listado.</string>
@@ -55,6 +55,19 @@
     <string name="sensor_listado_ausente">Dispositivo sin acelerómetro.</string>
     <string name="sensor_listado_sin_lectura">Lectura del acelerómetro no disponible.</string>
     <string name="sensor_listado_anterior">Lectura de sensor no registrada.</string>
+
+    <string name="btn_actualizar_mapa">Actualizar mapa</string>
+    <string name="mapa_cargando">Cargando la ubicación guardada…</string>
+    <string name="mapa_listo">Ubicación de la incidencia guardada.</string>
+    <string name="mapa_sin_configuracion">El mapa no está disponible en esta instalación.</string>
+    <string name="mapa_servicios_google">Actualiza los servicios de Google Play para usar el mapa.</string>
+    <string name="mapa_vacio">No hay incidencias para mostrar. Registra una primero.</string>
+    <string name="mapa_sin_datos_locales">Todavía no hay datos locales. Comprueba internet y pulsa Actualizar mapa.</string>
+    <string name="mapa_incidencia_ausente">La incidencia seleccionada ya no está disponible.</string>
+    <string name="mapa_coordenadas_invalidas">La incidencia no tiene coordenadas válidas.</string>
+    <string name="mapa_cache">Ubicación recuperada del dispositivo. Esperando confirmación del servidor.</string>
+    <string name="mapa_pendiente">La ubicación pertenece a una incidencia pendiente de sincronizar.</string>
+    <string name="mapa_error">No se pudo cargar la incidencia. Comprueba la conexión y pulsa Actualizar mapa.</string>
 
     <string-array name="categorias">
         <item>Seleccionar categoría</item>
