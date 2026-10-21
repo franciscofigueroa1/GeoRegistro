@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">GeoRegistro</string>
+    <string name="btn_registrar">Registrar incidencia</string>
+    <string name="btn_listado">Ver incidencias</string>
+    <string name="btn_mapa">Ver mapa</string>
+
+    <string name="titulo_incidencia">Título de la incidencia</string>
+    <string name="descripcion_incidencia">Descripción</string>
+    <string name="categoria">Categoría</string>
+    <string name="fecha_registro">Fecha y hora</string>
+    <string name="latitud_pendiente">Latitud: sin obtener</string>
+    <string name="longitud_pendiente">Longitud: sin obtener</string>
+    <string name="btn_ubicacion">Obtener ubicación</string>
+    <string name="btn_guardar">Guardar incidencia</string>
+
+    <string name="btn_volver">Volver al inicio</string>
+    <string name="btn_actualizar">Actualizar listado</string>
+    <string name="conexion_iniciando">Conectando…</string>
+    <string name="error_conexion">No se pudo conectar. Comprueba internet y vuelve a intentarlo.</string>
+    <string name="error_sesion">Vuelve al inicio para conectar tu sesión.</string>
+    <string name="error_titulo">Escribe un título.</string>
+    <string name="error_descripcion">Escribe una descripción.</string>
+    <string name="error_categoria">Selecciona una categoría.</string>
+    <string name="error_coordenadas">Obtén la ubicación antes de guardar.</string>
+    <string name="fecha_valor">Fecha y hora: %1$s</string>
+    <string name="latitud_valor">Latitud: %1$.6f</string>
+    <string name="longitud_valor">Longitud: %1$.6f</string>
+    <string name="ubicacion_buscando">Obteniendo ubicación…</string>
+    <string name="ubicacion_lista">Ubicación obtenida.</string>
+    <string name="ubicacion_aproximada">Ubicación aproximada obtenida.</string>
+    <string name="ubicacion_denegada">Permiso de ubicación denegado. Puedes volver a solicitarlo con el botón.</string>
+    <string name="ubicacion_ajustes">Permiso bloqueado. Puedes habilitarlo en Ajustes → Aplicaciones → GeoRegistro → Permisos.</string>
+    <string name="ubicacion_desactivada">Activa la ubicación del teléfono y vuelve a intentarlo.</string>
+    <string name="ubicacion_no_disponible">No se pudo obtener la ubicación. Comprueba que esté activada y vuelve a intentarlo.</string>
+    <string name="ubicacion_cancelada">La búsqueda se interrumpió. Puedes volver a solicitar la ubicación.</string>
+    <string name="guardando">Enviando incidencia…</string>
+    <string name="guardado_pendiente">La incidencia está en este dispositivo, pendiente de confirmar en el servidor. Puedes volver al inicio y consultar el listado.</string>
+    <string name="guardado_correcto">Incidencia guardada.</string>
+    <string name="error_guardado">No se pudo guardar. Comprueba la conexión y vuelve a intentarlo.</string>
+    <string name="error_confirmacion">No se pudo confirmar el guardado. Consulta el listado antes de volver a registrar la incidencia.</string>
+    <string name="listado_cargando">Cargando incidencias…</string>
+    <string name="listado_vacio">Todavía no tienes incidencias guardadas.</string>
+    <string name="listado_actualizado">Listado actualizado.</string>
+    <string name="listado_cache">Mostrando datos locales. Esperando confirmación del servidor.</string>
+    <string name="listado_pendiente">Hay incidencias pendientes de sincronizar. Se enviarán al recuperar la conexión.</string>
+    <string name="error_listado">No se pudo cargar el listado. Comprueba la conexión y pulsa Actualizar listado.</string>
+    <string name="incidencia_listado">%1$s\n%2$s · %3$s\n%4$s\nLatitud: %5$.6f · Longitud: %6$.6f</string>
+
+    <string-array name="categorias">
+        <item>Seleccionar categoría</item>
+        <item>Infraestructura</item>
+        <item>Seguridad</item>
+        <item>Otro</item>
+    </string-array>
 </resources>

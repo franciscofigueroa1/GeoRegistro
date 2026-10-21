@@ -3,6 +3,7 @@ package cl.francisco.georegistro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +11,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnRegistrar, btnListado, btnMapa;
+    private TextView tvEstadoConexion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +38,42 @@ public class MainActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        Button btnRegistrar = findViewById(R.id.btnRegistrar);
-        Button btnListado = findViewById(R.id.btnListado);
-        Button btnMapa = findViewById(R.id.btnMapa);
+        btnRegistrar = findViewById(R.id.btnRegistrar);
+        btnListado = findViewById(R.id.btnListado);
+        btnMapa = findViewById(R.id.btnMapa);
+        tvEstadoConexion = findViewById(R.id.tvEstadoConexion);
 
-        btnRegistrar.setOnClickListener(v -> {
-            Intent pantalla = new Intent(
-                    MainActivity.this, RegistroActivity.class);
-            startActivity(pantalla);
-        });
+        btnRegistrar.setOnClickListener(v -> abrirPantalla(new Intent(this, RegistroActivity.class)));
+        btnListado.setOnClickListener(v -> abrirPantalla(new Intent(this, ListadoActivity.class)));
+        btnMapa.setOnClickListener(v -> abrirPantalla(new Intent(this, MapaActivity.class)));
+    }
 
-        btnListado.setOnClickListener(v -> {
-            Intent pantalla = new Intent(
-                    MainActivity.this, ListadoActivity.class);
-            startActivity(pantalla);
-        });
+    private void abrirPantalla(Intent pantalla) {
+        FirebaseAuth sesion = FirebaseAuth.getInstance();
 
-        btnMapa.setOnClickListener(v -> {
-            Intent pantalla = new Intent(
-                    MainActivity.this, MapaActivity.class);
+        if (sesion.getCurrentUser() != null) {
+            tvEstadoConexion.setText("");
             startActivity(pantalla);
+            return;
+        }
+
+        activarBotones(false);
+        tvEstadoConexion.setText(R.string.conexion_iniciando);
+
+        sesion.signInAnonymously().addOnCompleteListener(this, tarea -> {
+            activarBotones(true);
+            if (tarea.isSuccessful()) {
+                tvEstadoConexion.setText("");
+                startActivity(pantalla);
+            } else {
+                tvEstadoConexion.setText(R.string.error_conexion);
+            }
         });
+    }
+
+    private void activarBotones(boolean activos) {
+        btnRegistrar.setEnabled(activos);
+        btnListado.setEnabled(activos);
+        btnMapa.setEnabled(activos);
     }
 }
