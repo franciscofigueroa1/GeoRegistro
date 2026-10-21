@@ -46,6 +46,16 @@
     <string name="error_listado">No se pudo cargar el listado. Comprueba la conexión y pulsa Actualizar listado.</string>
     <string name="incidencia_listado">%1$s\n%2$s · %3$s\n%4$s\nLatitud: %5$.6f · Longitud: %6$.6f</string>
 
+    <string name="sensor_titulo">Acelerómetro (m/s²)</string>
+    <string name="sensor_esperando">Esperando una lectura del sensor…</string>
+    <string name="sensor_ausente">Este dispositivo no tiene acelerómetro. Puedes registrar la incidencia igualmente.</string>
+    <string name="sensor_sin_lectura">No se pudo leer el acelerómetro. Puedes registrar la incidencia igualmente.</string>
+    <string name="sensor_valores">X: %1$.2f\nY: %2$.2f\nZ: %3$.2f</string>
+    <string name="sensor_listado">Acelerómetro: X %1$.2f · Y %2$.2f · Z %3$.2f m/s²</string>
+    <string name="sensor_listado_ausente">Dispositivo sin acelerómetro.</string>
+    <string name="sensor_listado_sin_lectura">Lectura del acelerómetro no disponible.</string>
+    <string name="sensor_listado_anterior">Lectura de sensor no registrada.</string>
+
     <string-array name="categorias">
         <item>Seleccionar categoría</item>
         <item>Infraestructura</item>

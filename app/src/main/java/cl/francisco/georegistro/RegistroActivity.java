@@ -2,6 +2,10 @@ package cl.francisco.georegistro;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Button;
@@ -38,7 +42,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class RegistroActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity implements SensorEventListener {
 
     private EditText etTitulo, etDescripcion;
     private Spinner spCategoria;
@@ -52,6 +56,11 @@ public class RegistroActivity extends AppCompatActivity {
     private String documentoPendiente;
     private CancellationTokenSource peticionUbicacion;
     private ListenerRegistration escuchaGuardado;
+    private SensorManager sensores;
+    private Sensor acelerometro;
+    private TextView tvSensor;
+    private float sensorX, sensorY, sensorZ;
+    private boolean lecturaDisponible;
 
     private final ActivityResultLauncher<String[]> permisosUbicacion =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), resultado -> {
@@ -84,12 +93,24 @@ public class RegistroActivity extends AppCompatActivity {
         tvEstadoRegistro = findViewById(R.id.tvEstadoRegistro);
         btnUbicacion = findViewById(R.id.btnUbicacion);
         btnGuardar = findViewById(R.id.btnGuardar);
+        tvSensor = findViewById(R.id.tvSensor);
+        sensores = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (sensores != null) {
+            acelerometro = sensores.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
 
         fecha = new Date();
         if (savedInstanceState != null) {
             fecha = new Date(savedInstanceState.getLong("fecha"));
             permisoSolicitado = savedInstanceState.getBoolean("permisoSolicitado");
             documentoPendiente = savedInstanceState.getString("documentoPendiente");
+            lecturaDisponible = savedInstanceState.getBoolean("lecturaDisponible");
+            if (lecturaDisponible) {
+                sensorX = savedInstanceState.getFloat("sensorX");
+                sensorY = savedInstanceState.getFloat("sensorY");
+                sensorZ = savedInstanceState.getFloat("sensorZ");
+                mostrarSensor();
+            }
             if (savedInstanceState.containsKey("latitud")) {
                 latitud = savedInstanceState.getDouble("latitud");
                 longitud = savedInstanceState.getDouble("longitud");
@@ -116,6 +137,52 @@ public class RegistroActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         escucharGuardado();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (documentoPendiente == null) {
+            lecturaDisponible = false;
+            tvSensor.setText(acelerometro == null
+                    ? R.string.sensor_ausente : R.string.sensor_esperando);
+        } else if (!lecturaDisponible) {
+            tvSensor.setText(acelerometro == null
+                    ? R.string.sensor_ausente : R.string.sensor_sin_lectura);
+        }
+        if (acelerometro != null && sensores != null) {
+            boolean registrado = sensores.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
+            if (!registrado && documentoPendiente == null) {
+                tvSensor.setText(R.string.sensor_sin_lectura);
+            }
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent evento) {
+        if (documentoPendiente != null || evento.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+        sensorX = evento.values[0];
+        sensorY = evento.values[1];
+        sensorZ = evento.values[2];
+        lecturaDisponible = true;
+        mostrarSensor();
+    }
+
+    private void mostrarSensor() {
+        tvSensor.setText(getString(R.string.sensor_valores,
+                (double) sensorX, (double) sensorY, (double) sensorZ));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int precision) {
+    }
+
+    @Override
+    protected void onPause() {
+        if (sensores != null) {
+            sensores.unregisterListener(this);
+        }
+        super.onPause();
     }
 
     private boolean tienePermisoUbicacion() {
@@ -251,6 +318,15 @@ public class RegistroActivity extends AppCompatActivity {
         datos.put("latitud", latitud);
         datos.put("longitud", longitud);
         datos.put("ubicacionAproximada", ubicacionAproximada);
+        datos.put("sensorDisponible", acelerometro != null);
+        datos.put("lecturaSensorDisponible", lecturaDisponible);
+        if (lecturaDisponible) {
+            Map<String, Object> datoSensor = new HashMap<>();
+            datoSensor.put("x", (double) sensorX);
+            datoSensor.put("y", (double) sensorY);
+            datoSensor.put("z", (double) sensorZ);
+            datos.put("datoSensor", datoSensor);
+        }
 
         DocumentReference documento = FirebaseFirestore.getInstance()
                 .collection("usuarios").document(usuario.getUid())
@@ -323,6 +399,12 @@ public class RegistroActivity extends AppCompatActivity {
         estado.putLong("fecha", fecha.getTime());
         estado.putBoolean("permisoSolicitado", permisoSolicitado);
         estado.putString("documentoPendiente", documentoPendiente);
+        estado.putBoolean("lecturaDisponible", lecturaDisponible);
+        if (lecturaDisponible) {
+            estado.putFloat("sensorX", sensorX);
+            estado.putFloat("sensorY", sensorY);
+            estado.putFloat("sensorZ", sensorZ);
+        }
         if (latitud != null && longitud != null) {
             estado.putDouble("latitud", latitud);
             estado.putDouble("longitud", longitud);

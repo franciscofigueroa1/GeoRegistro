@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Query;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
 public class ListadoActivity extends AppCompatActivity {
 
@@ -91,9 +92,10 @@ public class ListadoActivity extends AppCompatActivity {
                                 || !(categoria instanceof String) || !(fecha instanceof Timestamp)
                                 || !(latitud instanceof Number) || !(longitud instanceof Number)) continue;
 
-                        textos.add(getString(R.string.incidencia_listado, titulo, categoria,
+                        String texto = getString(R.string.incidencia_listado, titulo, categoria,
                                 formato.format(((Timestamp) fecha).toDate()), descripcion,
-                                ((Number) latitud).doubleValue(), ((Number) longitud).doubleValue()));
+                                ((Number) latitud).doubleValue(), ((Number) longitud).doubleValue());
+                        textos.add(texto + "\n" + textoSensor(documento));
                     }
                     adaptador.notifyDataSetChanged();
 
@@ -106,6 +108,27 @@ public class ListadoActivity extends AppCompatActivity {
                                 ? R.string.listado_vacio : R.string.listado_actualizado);
                     }
                 });
+    }
+
+    private String textoSensor(DocumentSnapshot documento) {
+        Object datoSensor = documento.get("datoSensor");
+        if (Boolean.TRUE.equals(documento.get("lecturaSensorDisponible")) && datoSensor instanceof Map<?, ?>) {
+            Map<?, ?> valores = (Map<?, ?>) datoSensor;
+            Object x = valores.get("x");
+            Object y = valores.get("y");
+            Object z = valores.get("z");
+            if (x instanceof Number && y instanceof Number && z instanceof Number) {
+                return getString(R.string.sensor_listado,
+                        ((Number) x).doubleValue(), ((Number) y).doubleValue(), ((Number) z).doubleValue());
+            }
+        }
+        if (Boolean.FALSE.equals(documento.get("sensorDisponible"))) {
+            return getString(R.string.sensor_listado_ausente);
+        }
+        if (Boolean.TRUE.equals(documento.get("sensorDisponible"))) {
+            return getString(R.string.sensor_listado_sin_lectura);
+        }
+        return getString(R.string.sensor_listado_anterior);
     }
 
     @Override
