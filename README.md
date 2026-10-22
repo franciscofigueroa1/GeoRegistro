@@ -66,17 +66,28 @@ Las instrucciones completas están en la [guía de Google Maps](https://develope
 
 La app compila correctamente y el análisis Lint no encontró errores. Se comprobó el inicio de sesión anónimo y que las reglas de Firestore rechazan las lecturas sin sesión o desde otro usuario. Esa comprobación no creó incidencias.
 
-Se probó la app inicial y su navegación en un dispositivo Android. Para comprobar la versión completa, falta realizar estas pruebas:
+En las pruebas realizadas en un dispositivo Android se comprobó:
 
-- Intentar guardar con campos vacíos y comprobar los avisos.
-- Denegar el permiso de ubicación, volver a solicitarlo y comprobar las coordenadas.
-- Registrar una incidencia y verificar que siga en el listado al cerrar y abrir la app.
-- Mover el dispositivo para ver cambiar los valores del sensor y comprobar su lectura guardada. En un dispositivo sin sensor, revisar el aviso correspondiente.
-- Guardar sin internet y comprobar que se indique como pendiente hasta recuperar la conexión, sin duplicar la incidencia.
-- Con Maps configurado, abrir una incidencia y comprobar que el marcador coincida con sus coordenadas guardadas.
+- La navegación entre pantallas y los avisos al intentar guardar sin título o descripción.
+- La obtención de latitud y longitud y el aviso al denegar el permiso de ubicación, sin cerrar la app.
+- El cambio de los valores X, Y y Z del acelerómetro al inclinar el dispositivo.
+- El guardado de una incidencia y su aparición en el listado después de cerrar y abrir la app.
+- El estado pendiente al guardar sin internet y la sincronización al recuperar la conexión, sin duplicar el registro.
 
-**Capturas:** falta agregar las del teléfono: inicio, formulario, validación, listado y mapa cuando funcione. Se usarán textos de prueba y se evitará mostrar datos personales o la ubicación del domicilio.
+Queda pendiente probar en un dispositivo sin acelerómetro y activar Maps para comprobar el marcador de una incidencia guardada.
 
 Los archivos `app/google-services.json`, `secrets.properties` y `local.properties` están excluidos de Git. La clave se configura localmente y no se sube al repositorio.
+
+## Capturas
+
+Pantalla de inicio:
+
+<img src="docs/capturas/inicio.jpg" alt="Inicio de GeoRegistro con los tres botones de navegación" width="300">
+
+Formulario con el aviso de título obligatorio y la lectura del acelerómetro:
+
+<img src="docs/capturas/formulario-validacion.jpg" alt="Formulario con el aviso Escribe un título y los valores del sensor" width="300">
+
+La captura del marcador queda pendiente de activar Maps.
 
 Se usó ayuda de IA durante el desarrollo y para redactar esta documentación. El detalle está en [DECLARACION_IA.md](DECLARACION_IA.md).
